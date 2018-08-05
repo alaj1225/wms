@@ -78,6 +78,7 @@
                                 <th>廠商電話</th>
                                 <th>廠商統編</th>
                                 <th>廠商地址</th>
+                                <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -88,6 +89,10 @@
                                 <td>dolor</td>
                                 <td>sit</td>
                                 <td>sit</td>
+                                <td>
+                                    <i class="far fa-edit mr-2" title="Edit"></i>
+                                    <i class="far fa-trash-alt" title="Delete"></i>
+                                </td>
                             </tr>
                             <tr>
                                 <td>1,002</td>
@@ -96,6 +101,10 @@
                                 <td>adipiscing</td>
                                 <td>elit</td>
                                 <td>elit</td>
+                                <td>
+                                    <i class="far fa-edit mr-2" title="Edit"></i>
+                                    <i class="far fa-trash-alt" title="Delete"></i>
+                                </td>
                             </tr>
                             <tr>
                                 <td>1,003</td>
@@ -104,6 +113,10 @@
                                 <td>odio</td>
                                 <td>Praesent</td>
                                 <td>Praesent</td>
+                                <td>
+                                    <i class="far fa-edit mr-2" title="Edit"></i>
+                                    <i class="far fa-trash-alt" title="Delete"></i>
+                                </td>
                             </tr>
                             <tr>
                                 <td>1,003</td>
@@ -112,6 +125,10 @@
                                 <td>cursus</td>
                                 <td>ante</td>
                                 <td>ante</td>
+                                <td>
+                                    <i class="far fa-edit mr-2"></i>
+                                    <i class="far fa-trash-alt"></i>
+                                </td>
                             </tr>
                             <tr>
                                 <td>1,004</td>
@@ -120,6 +137,10 @@
                                 <td>Sed</td>
                                 <td>nisi</td>
                                 <td>nisi</td>
+                                <td>
+                                    <i class="far fa-edit mr-2"></i>
+                                    <i class="far fa-trash-alt"></i>
+                                </td>
                             </tr>
                             <tr>
                                 <td>1,005</td>
@@ -266,6 +287,7 @@
     <script>
         feather.replace()
         $('form').submit(false);
+
     </script>
     <!-- Graphs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
@@ -302,6 +324,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script>
+        //新增廠商
         $("#btnCompanyAdd").click(function() {
             var addCompanyName = $("#addCompanyName").val()
             var addCompanyPhone = $("#addCompanyPhone").val()
@@ -318,6 +341,14 @@
                     alert("Data: " + data + "\nStatus: " + status);
                 });
         });
+        //顯示廠商列表
+        $.post("http://140.118.175.199/api/WMS_API.php", {
+                type: "factory_list"
+                
+            },
+            function(data, status) {
+                alert("Data: " + data + "\nStatus: " + status);
+            });
 
     </script>
 </body>
