@@ -38,8 +38,8 @@
             alert(user_password)
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "sign_in",
-                    email: "alaj1225",
-                    password: "a02010516"
+                    email: user_email,
+                    password: user_password
                 },
                 function (data, status) {
                     alert("Data: " + data + "\nStatus: " + status);
