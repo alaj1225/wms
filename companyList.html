@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <h2 class="mb-4">Company List</h2>
-                <button type="button" class="btn btn-success mb-3 float-right" data-toggle="modal" data-target="#exampleModal">
+                <button type="button" class="btn btn-success mb-3 float-right" data-toggle="modal" data-target="#addCompanyModal">
                         <i class="fas fa-plus"></i>
                         Add
                     </button>
@@ -90,8 +90,8 @@
             </main>
         </div>
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Add Company Modal -->
+    <div class="modal fade" id="addCompanyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -124,6 +124,45 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="btnCompanyAdd">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Company Modal -->
+    <div class="modal fade" id="addCompanyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Company</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="companyName">廠商名稱</label>
+                            <input type="email" class="form-control" id="editCompanyName" aria-describedby="emailHelp" placeholder="Enter Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="companyPhone">廠商電話</label>
+                            <input type="text" class="form-control" id="editCompanyPhone" placeholder="Enter Phone">
+                            <small id="phoneHelp" class="form-text text-muted">ex. 03-1234567</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="companyAddr">廠商地址</label>
+                            <input type="text" class="form-control" id="editCompanyAddr" placeholder="Enter Address">
+                        </div>
+                        <div class="form-group">
+                            <label for="companyNum">廠商統編</label>
+                            <input type="text" class="form-control" id="editCompanyNum" placeholder="Enter tax ID number">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnCompanyEdit">Edit</button>
                 </div>
             </div>
         </div>
@@ -181,7 +220,7 @@
         showCompanyList();
         //新增廠商
         $("#btnCompanyAdd").click(function() {
-			$('#exampleModal').modal('hide')
+			$('#addCompanyModal').modal('hide')
             var addCompanyName = $("#addCompanyName").val()
             var addCompanyPhone = $("#addCompanyPhone").val()
             var addCompanyAddr = $("#addCompanyAddr").val()
@@ -230,31 +269,19 @@
 		}
         
         function editCompany(e) {
-            alert($(e).attr("data-company-id"))
+            var company_id = $(e).attr("data-company-id")
+            alert(company_id)
 			$.post("http://140.118.175.199/api/WMS_API.php", {
-                type: "factory_list"
+                type: "factory_list_Only",
+                factoryID: company_id
             },
             function(data, status) {
-                //alert("Data: " + data + "\nStatus: " + status);
+                alert("Data: " + data + "\nStatus: " + status);
                 var obj = JSON.parse(data);
-			   	//alert(obj.data)
+			   	alert(obj.data)
 				var obj = obj.data
                 var temp = ""
-                if(obj.length == 0){
-                    $("#tableCompanyList").append("<p style='text-align:center'>There isn't any company yet.</p>"); 
-                }else{
-                    for (i = 0; i < obj.length; i++) {
-					var list_num = parseInt(i)+parseInt(1)
-                    var temp = "<tr><td>"+list_num+"</td>"+
-                               "<td>"+obj[i].FactoryId+"</td>"+
-                               "<td>"+obj[i].FactoryName+"</td>"+
-                               "<td>"+obj[i].FactoryPhone+"</td>"+
-                               "<td>"+obj[i].FactoryAddress+"</td>"+
-                               "<td>"+obj[i].FactoryTaxID+"</td>"+
-                                "<td><i class='far fa-edit mr-2' title='Edit' onclick='editCompany(this)' data-company-id='"+obj[i].FactoryId+"'></i><i class='far fa-trash-alt' title='Delete' onclick='deleteCompany(this)' data-company-id='"+obj[i].FactoryId+"'></i></td></tr>"
-                    $("#tbodyCompantList").append(temp);        
-                }
-                }
+                console.log(obj[i].FactoryId+obj[i].FactoryName+obj[i].FactoryPhone+obj[i].FactoryAddress+obj[i].FactoryTaxID+"</td>")
                 
             });
         }
