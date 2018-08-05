@@ -206,7 +206,6 @@
                 var obj = JSON.parse(data);
 			   	alert(obj.data)
 				var obj = obj.data
-                var company_list_html = ""
                 var temp = ""
                 if(obj.length == 0){
                     $("#tableCompanyList").append("<p style='text-align:center'>There isn't any company yet.</p>"); 
@@ -219,13 +218,15 @@
                                "<td>"+obj[i].FactoryPhone+"</td>"+
                                "<td>"+obj[i].FactoryAddress+"</td>"+
                                "<td>"+obj[i].FactoryTaxID+"</td>"+
-                                "<td><i class='far fa-edit mr-2' title='Edit' data-company-id='"+obj[i].FactoryId+"'></i><i class='far fa-trash-alt' title='Delete' data-company-id='"+obj[i].FactoryId+"'></i></td></tr>"
+                                "<td><i class='far fa-edit mr-2' title='Edit' onclick='editCompany()' data-company-id='"+obj[i].FactoryId+"'></i><i class='far fa-trash-alt' title='Delete' onclick='deleteCompany()' data-company-id='"+obj[i].FactoryId+"'></i></td></tr>"
                     $("#tbodyCompantList").append(temp);        
                 }
                 }
                 
             });
-
+        function editCompany() {
+            alert(this.attr("data-company-id"))
+        }
     </script>
 </body>
 
