@@ -81,7 +81,7 @@
                                 <th>操作</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tbodyCompantList">
                             <tr>
                                 <td>1,001</td>
                                 <td>Lorem</td>
@@ -344,10 +344,24 @@
         //顯示廠商列表
         $.post("http://140.118.175.199/api/WMS_API.php", {
                 type: "factory_list"
-                
+
             },
             function(data, status) {
                 alert("Data: " + data + "\nStatus: " + status);
+                var obj = JSON.parse(data);
+                var company_list_html = ""
+                var temp = ""
+                for (i = 0; i < obj.length; i++) {
+                    var temp = "<tr><td>"+i+1+"</td>"+
+                               "<td>"+obj[i].FactoryId+"</td>"+
+                               "<td>"+obj[i].FactoryName+"</td>"+
+                               "<td>"+obj[i].FactoryPhone+"</td>"+
+                               "<td>"+obj[i].FactoryAddress+"</td>"+
+                               "<td>"+obj[i].FactoryTaxID+"</td>"+
+                                "<td><i class='far fa-edit mr-2' title='Edit'></i><i class='far fa-trash-alt' title='Delete'></i></td></tr>"
+                    $("#tbodyCompantList").append(temp);        
+                    
+                }
             });
 
     </script>
