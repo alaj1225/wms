@@ -47,7 +47,11 @@
                     alert(obj)
                     alert(obj.code)
                     alert(obj.token)
-                    setCookie("loginStatus", "pass", 1)
+                    if (obj.code == 200){
+                        setCookie("loginStatus", obj.code, 1)
+                        setCookie("loginToken", obj.token, 1)
+                    }
+                    
                 });
         }
 
