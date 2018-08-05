@@ -43,8 +43,10 @@
                 },
                 function (data, status) {
                     alert("Data: " + data + "\nStatus: " + status);
-                    alert(data.code)
-                    alert(data.token)
+					var obj = JSON.parse(data);
+                    alert(obj)
+                    alert(obj.code)
+                    alert(obj.token)
                     setCookie("loginStatus", "pass", 1)
                 });
         }
