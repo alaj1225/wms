@@ -71,7 +71,10 @@
             var expires = "expires=" + d.toUTCString();
             document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
         }
-    
+    function signOut() {
+      document.cookie = 'loginStatus' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      document.cookie = 'loginToken' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
     function validate(input) {
         if ($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
             if ($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
