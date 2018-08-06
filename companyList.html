@@ -217,8 +217,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script>
-        showCompanyList();
         checkIfLogin();
+        showCompanyList();
         //新增廠商
         $("#btnCompanyAdd").click(function() {
             $('#addCompanyModal').modal('hide')
@@ -343,12 +343,12 @@
         function checkIfLogin() {
             var loginStatus = getCookie("loginStatus")
             var loginToken = getCookie("loginToken")
-            console.log(loginStatus,loginToken)
+            //console.log(loginStatus,loginToken)
             if(loginStatus == "" || loginToken == "" || loginStatus == null || loginToken == null){
                 window.location.href = "http://140.118.175.199/wms-project/login/";
             }
         }
-
+        //取得Cookie值
         function getCookie(cname) {
             var name = cname + "=";
             var decodedCookie = decodeURIComponent(document.cookie);
