@@ -344,7 +344,7 @@
             var loginStatus = getCookie("loginStatus")
             var loginToken = getCookie("loginToken")
             console.log(loginStatus,loginToken)
-            if(loginStatus == undefined || loginToken == undefined){
+            if(loginStatus == "" || loginToken == "" || loginStatus == null || loginToken == null){
                 window.location.href = "http://140.118.175.199/wms-project/login/";
             }
         }
