@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>WMS Company List</title>
+    <title>WMS Product List</title>
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
     <!-- Custom styles for this template -->
@@ -81,7 +81,7 @@
                                 <th>操作</th>
                             </tr>
                         </thead>
-                        <tbody id="tbodyCompanyList">
+                        <tbody id="tbodyCompantList">
                             
                         </tbody>
                     </table>
@@ -234,7 +234,7 @@
                 },
                 function(data, status) {
                     //alert("Data: " + data + "\nStatus: " + status);
-				$("#tbodyCompanyList").html('')
+				$("#tbodyCompantList").html('')
 				showCompanyList();
                 });
         });
@@ -261,7 +261,7 @@
                 },
                 function(data, status) {
                     //alert("Data: " + data + "\nStatus: " + status);
-				$("#tbodyCompanyList").html('')
+				$("#tbodyCompantList").html('')
 				showCompanyList();
 				$('#editCompanyModal').modal('hide')
                 });
@@ -289,7 +289,7 @@
                                "<td>"+obj[i].FactoryTaxID+"</td>"+
                                "<td>"+obj[i].FactoryAddress+"</td>"+
                                 "<td><i class='far fa-edit mr-2' title='Edit' onclick='editCompany(this)' data-company-id='"+obj[i].FactoryId+"'></i><i class='far fa-trash-alt' title='Delete' onclick='deleteCompany(this)' data-company-id='"+obj[i].FactoryId+"'></i></td></tr>"
-                    $("#tbodyCompanyList").append(temp);        
+                    $("#tbodyCompantList").append(temp);        
                 }
                 }
                 
@@ -327,7 +327,7 @@
             },
             function(data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
-                $("#tbodyCompanyList").html('')
+                $("#tbodyCompantList").html('')
 				showCompanyList();
             });
         }
