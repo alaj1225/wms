@@ -218,6 +218,7 @@
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script>
         showCompanyList();
+        checkIfLogin();
         //新增廠商
         $("#btnCompanyAdd").click(function() {
             $('#addCompanyModal').modal('hide')
@@ -336,6 +337,32 @@
         function signOut() {
             document.cookie = "loginStatus=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             document.cookie = "loginToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location.href = "http://140.118.175.199/wms-project/login/";
+        }
+        //偵測未登入跳轉至登入頁
+        function checkIfLogin() {
+            var loginStatus = getCookie("loginStatus")
+            var loginToken = getCookie("loginToken")
+            
+            if(loginStatus == undefined || loginToken == undefined){
+                window.location.href = "http://140.118.175.199/wms-project/login/";
+            }
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
         }
 
     </script>
