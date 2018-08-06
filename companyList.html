@@ -334,8 +334,15 @@
         }
         //登出
         function signOut() {
-            document.cookie = 'loginStatus' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-            document.cookie = 'loginToken' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            DelCookie("loginStatus")
+            DelCookie("loginToken")
+        }
+
+        function DelCookie(name) {
+            var exp = new Date();
+            exp.setTime(exp.getTime() - 1);
+            var cval = getCookie(name);
+            if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
         }
 
     </script>
