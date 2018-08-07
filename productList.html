@@ -185,14 +185,15 @@
         <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
         <script>
         showProductList();
+			
         //新增品項
         $("#btnProductAdd").click(function() {
 			$('#addProductModal').modal('hide')
             var addProductName = $("#addProductName").val()
             $.post("http://140.118.175.199/api/WMS_API.php", {
-                    type: "Product_add",
+                    type: "product_add",
                     productName: addProductName,
-                    BuildID: 9
+                    companyId: 1
                 },
                 function(data, status) {
                     //alert("Data: " + data + "\nStatus: " + status);
@@ -200,28 +201,31 @@
 				showProductList();
                 });
         });
+		
 		//修改品項
         $("#btnProductEdit").click(function() {
 			var editProductId = $("#btnProductEdit").attr("data-product-id")
             var editProductName = $("#editProductName").val()
-            
+            alert(editProductId)
+            alert(editProductName)
             $.post("http://140.118.175.199/api/WMS_API.php", {
-                    type: "Product_updata",
-					ProductID: editProductId,
-                    ProductName: editProductName
+                    type: "product_updata",
+					productId: editProductId,
+                    productName: editProductName
                 },
                 function(data, status) {
-                    //alert("Data: " + data + "\nStatus: " + status);
-				$("#tbodyProductList").html('')
-				showProductList();
-				$('#editProductModal').modal('hide')
-                });
-        });
+                    alert("Data: " + data + "\nStatus: " + status);
+					$("#tbodyProductList").html('')
+					showProductList();
+					$('#editProductModal').modal('hide')
+					});
+        		});
+			
         //顯示品項列表
 		function showProductList(){
 			$.post("http://140.118.175.199/api/WMS_API.php", {
-                type: "Product_list",
-                factoryID: 9
+                type: "product_list",
+                companyId: 1
             },
             function(data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
@@ -235,11 +239,11 @@
                     for (i = 0; i < obj.length; i++) {
 					var list_num = parseInt(i)+parseInt(1)
                     var temp = "<tr><td>"+list_num+"</td>"+
-                               "<td>"+obj[i].Product_id+"</td>"+
-                               "<td>"+obj[i].Product_name+"</td>"+
+                               "<td>"+obj[i].productId+"</td>"+
+                               "<td>"+obj[i].productName+"</td>"+
                                
                                
-                                "<td><i class='far fa-edit mr-2' title='Edit' onclick='editProduct(this)' data-product-id='"+obj[i].Product_id+"'></i><i class='far fa-trash-alt' title='Delete' onclick='deleteProduct(this)' data-product-id='"+obj[i].Product_id+"'></i></td></tr>"
+                                "<td><i class='far fa-edit mr-2' title='Edit' onclick='editProduct(this)' data-product-id='"+obj[i].productId+"'></i><i class='far fa-trash-alt' title='Delete' onclick='deleteProduct(this)' data-product-id='"+obj[i].productName+"'></i></td></tr>"
                     $("#tbodyProductList").append(temp);        
                 }
                 }
@@ -251,8 +255,8 @@
             var product_id = $(e).attr("data-product-id")
             //alert(product_id)
 			$.post("http://140.118.175.199/api/WMS_API.php", {
-                type: "Product_list_Only",
-                ProductID: product_id
+                type: "product_list_Only",
+                productId: product_id
             },
             function(data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
@@ -261,8 +265,8 @@
 				var obj = obj.data
                 var temp = ""
                 
-				$("#editProductName").val(obj[0].ProductName)
-				$("#btnProductEdit").attr("data-product-id",obj[0].ProductId)
+				$("#editProductName").val(obj[0].productName)
+				$("#btnProductEdit").attr("data-product-id",obj[0].productId)
                 $('#editProductModal').modal('show')
             });
         }
@@ -270,8 +274,8 @@
 			var product_id = $(e).attr("data-product-id")
             //alert(product_id)
 			$.post("http://140.118.175.199/api/WMS_API.php", {
-                type: "Product_delete",
-				ProductID: product_id
+                type: "product_delete",
+				productID: product_id
             },
             function(data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);

@@ -357,6 +357,8 @@
                     console.log(obj.data)
                     var obj_data = obj.data
                     var obj_factory = obj.factory
+					console.log(obj_factory)
+
                     
                     $("#showPurchaseDetail_factoryName").text(obj_factory.factoryName)
                     $("#showPurchaseDetail_factoryPhone").text(obj_factory.factoryPhone)
@@ -377,11 +379,12 @@
                                 "<td>" + obj_data[i].purchaseItemId + "</td>" +
                                 "<td>" + obj_data[i].productName + "</td>" +
                                 "<td>" + obj_data[i].purchaseItemCount + "</td>" +                            
-                                "<td>" + purchaseInBound_html + "</td>" 
+                                "<td>" + purchaseItemInBound_html + "</td>" 
                             
                             $("#tbodyShowPurchaseDetailList").append(temp);
                         }
                     }
+					$('#showPurchaseDetailModal').modal('show')
 //                    var temp = ""
 //                    console.log(obj[0].FactoryId + obj[0].FactoryName + obj[0].FactoryPhone + obj[0].FactoryAddress + obj[0].FactoryTaxID)
 //                    $("#editCompanyName").val(obj[0].FactoryName)
