@@ -220,7 +220,7 @@
         //顯示品項列表
 		function showProductList(){
 			$.post("http://140.118.175.199/api/WMS_API.php", {
-                type: "product_list",
+                type: "Product_list",
                 factoryID: 9
             },
             function(data, status) {
@@ -261,8 +261,8 @@
 				var obj = obj.data
                 var temp = ""
                 
-				$("#editProductName").val(obj[0].Product_name)
-				$("#btnProductEdit").attr("data-product-id",obj[0].Product_id)
+				$("#editProductName").val(obj[0].ProductName)
+				$("#btnProductEdit").attr("data-product-id",obj[0].ProductId)
                 $('#editProductModal').modal('show')
             });
         }
