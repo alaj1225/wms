@@ -343,7 +343,32 @@
 
                 });
         }
-
+        
+        function showPurchaseDetail(e) {
+            var purchase_id = $(e).attr("data-purchase-id")
+            //alert(purchase_id)
+            $.post("http://140.118.175.199/api/WMS_API.php", {
+                    type: "factory_list_Only",
+                    purchaseId: purchase_id
+                },
+                function(data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    console.log("Data: " + data + "\nStatus: " + status);
+                    var obj = JSON.parse(data);
+                    //alert(obj.data)
+                    console.log(obj.data)
+                    var obj = obj.data
+//                    var temp = ""
+//                    console.log(obj[0].FactoryId + obj[0].FactoryName + obj[0].FactoryPhone + obj[0].FactoryAddress + obj[0].FactoryTaxID)
+//                    $("#editCompanyName").val(obj[0].FactoryName)
+//                    $("#editCompanyPhone").val(obj[0].FactoryPhone)
+//                    $("#editCompanyAddr").val(obj[0].FactoryAddress)
+//                    $("#editCompanyNum").val(obj[0].FactoryTaxID)
+//                    $("#btnCompanyEdit").attr("data-company-id", obj[0].FactoryId)
+//                    $('#editCompanyModal').modal('show')
+                });
+        }
+        
         function deletePurchase(e) {
             var purchase_id = $(e).attr("data-purchase-id")
             //alert(purchase_id)
