@@ -113,7 +113,49 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="purchaseProductNum">品項數量</label>
-                                <input type="text" class="form-control addPurchaseProductNum" placeholder="Number">
+                                <input type="text" class="form-control addPurchaseProductNum" placeholder="Number" value="1">
+                            </div>
+                        </div>
+                        </span>
+                       
+                        <button type="button" class="btn btn-success" id="btnPurchaseAddColumn"><i class="fas fa-plus"></i> 新增品項欄位</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnPurchaseAdd">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<!-- Show Purchase Detail Modal -->
+    <div class="modal fade" id="showPurchaseDetailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Purchase</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="purchaseFactory">訂購廠商</label>
+                            <select class="form-control" id="addPurchaseFactory">
+                            </select>
+                        </div>
+                        <span id="addPurchaseProductArea">
+                            <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label for="purchaseProduct">品項名稱</label>
+                                <select class="form-control addPurchaseProduct">
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="purchaseProductNum">品項數量</label>
+                                <input type="text" class="form-control addPurchaseProductNum" placeholder="Number" value="1">
                             </div>
                         </div>
                         </span>
@@ -231,14 +273,37 @@
         //新增品項(送出)
         $("#btnPurchaseAdd").click(function() {
             var factoryId = $("#addPurchaseFactory").val()
-            var productId = $(".addPurchaseProduct").val()
+            //var productId = $(".addPurchaseProduct").val()
+			var productId_all = $(".addPurchaseProduct");
+			var productNum_all = $(".addPurchaseProductNum");
+			var postData = []
             alert(factoryId)
-            alert(productId)
+			for(var i = 0; i < productId_all.length; i++){
+				postData.push({"productId":$(productId_all[i]).val(),"productCount":$(productNum_all[i]).val()})
+				alert($(productId_all[i]).val());
+				alert($(productNum_all[i]).val());
+			}
+			var postData_all = {
+						"factoryId" : factoryId,
+						"companyId" : getCookie("loginCompanyId"),
+						"item" : postData
+					}
+			console.log(postData_all)
+			alert(JSON.stringify(postData_all))
+			$.post("http://140.118.175.199/api/WMS_API.php", {
+                    type: "purchase_add",
+                    data: JSON.stringify(postData_all)
+                },
+                function(data, status) {
+                    alert("Data: " + data + "\nStatus: " + status);
+             
+                });
+            //alert(productId)
         });
         
         //新增品項欄位
         $("#btnPurchaseAddColumn").click(function() {
-            var temp = "<div class='form-row'><div class='form-group col-md-8'><select class='form-control addPurchaseProduct'>"+getProductList+"</select></div><div class='form-group col-md-4'><input type='text' class='form-control addPurchaseProductNum' placeholder='Number'></div></div>" 
+            var temp = "<div class='form-row'><div class='form-group col-md-8'><select class='form-control addPurchaseProduct'>"+getProductList+"</select></div><div class='form-group col-md-4'><input type='text' class='form-control addPurchaseProductNum' placeholder='Number' value='1'></div></div>" 
             
             $("#addPurchaseProductArea").append(temp)
             
@@ -271,7 +336,7 @@
                                 "<td>" + obj[i].purchaseTime + "</td>" +                            
                                 "<td>" + purchaseInBound_html + "</td>" +
 
-                                "<td><i class='far fa-trash-alt' title='Delete' onclick='deletePurchase(this)' data-purchase-id='" + obj[i].purchaseId + "'></i></td></tr>"
+                                "<td><i class='fas fa-align-justify mr-2' title='Detail' onclick='showPurchaseDetail(this)' data-purchase-id='" + obj[i].purchaseId + "'></i><i class='far fa-trash-alt' title='Delete' onclick='deletePurchase(this)' data-purchase-id='" + obj[i].purchaseId + "'></i></td></tr>"
                             $("#tbodyPurchaseList").append(temp);
                         }
                     }
