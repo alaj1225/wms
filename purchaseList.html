@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <h2 class="mb-4">Purchase List</h2>
-                <button type="button" class="btn btn-success mb-3 float-right" data-toggle="modal" data-target="#addPurchaseModal">
+                <button type="button" class="btn btn-success mb-3 float-right" data-toggle="modal" data-target="#addPurchaseModal" id="btnAddPurchaseModal">
                         <i class="fas fa-plus"></i>
                         Add
                     </button>
@@ -180,9 +180,8 @@
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script>
         showPurchaseList();
-        function getProductList(){
-            //抓品項名稱
-            $.post("http://140.118.175.199/api/WMS_API.php", {
+		var getProductList = ""
+		$.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "product_list",
                     companyId: getCookie("loginCompanyId")
                 },
@@ -191,17 +190,16 @@
                     var obj = JSON.parse(data);
                     //alert(obj.data)
                     var obj = obj.data
-                    var temp = ""
+                    
                     for (i = 0; i < obj.length; i++) {
-                        var temp = temp + "<option data-product-id='" + obj[i].productId + "'>"+obj[i].productName+"</option>" 
+                        getProductList = getProductList + "<option data-product-id='" + obj[i].productId + "'>"+obj[i].productName+"</option>" 
                     }
+					//alert(getProductList)
                 });
-            return temp
-        }
+
+		
         //新增品項
-        $("#btnPurchaseAdd").click(function() {
-            $('#addPurchaseModal').modal('hide')
-            var addPurchaseName = $("#addPurchaseName").val()
+        $("#btnAddPurchaseModal").click(function() {
             //抓訂購廠商列表
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "factory_list",
@@ -223,24 +221,25 @@
                         }
                     }
                 });
-            $(".addPurchaseProduct").append(getProductList());
-            
-            $.post("http://140.118.175.199/api/WMS_API.php", {
-                    type: "Purchase_add",
-                    purchaseName: addPurchaseName,
-                    BuildID: 9
-                },
-                function(data, status) {
-                    //alert("Data: " + data + "\nStatus: " + status);
-                    $("#addPurchaseFactory").html('')
-                    $("#addPurchaseFactory").append()
-                    showPurchaseList();
-                });
+			
+            $(".addPurchaseProduct").append(getProductList);
+//            alert(getProductList())
+//            $.post("http://140.118.175.199/api/WMS_API.php", {
+//                    type: "Purchase_add",
+//                    purchaseName: addPurchaseName,
+//                    BuildID: 9
+//                },
+//                function(data, status) {
+//                    //alert("Data: " + data + "\nStatus: " + status);
+//                    $("#addPurchaseFactory").html('')
+//                    $("#addPurchaseFactory").append()
+//                    showPurchaseList();
+//                });
         });
         
         //新增品項欄位
         $("#btnPurchaseAddColumn").click(function() {
-            var temp = "<div class='form-row'><div class='form-group col-md-8'><select class='form-control addPurchaseProduct'>"+getProductList()+"</select></div><div class='form-group col-md-4'><input type='text' class='form-control addPurchaseProductNum' placeholder='Number'></div></div>" 
+            var temp = "<div class='form-row'><div class='form-group col-md-8'><select class='form-control addPurchaseProduct'>"+getProductList+"</select></div><div class='form-group col-md-4'><input type='text' class='form-control addPurchaseProductNum' placeholder='Number'></div></div>" 
             
             $("#addPurchaseProductArea").append(temp)
             
