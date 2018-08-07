@@ -231,7 +231,7 @@
                     factoryName: addCompanyName,
                     factoryPhone: addCompanyPhone,
                     factoryAddress: addCompanyAddr,
-                    factoryTaxID: addCompanyNum,
+                    factoryTaxId: addCompanyNum,
                     companyId: getCookie("loginCompanyId")
                 },
                 function(data, status) {
@@ -247,19 +247,19 @@
             var editCompanyPhone = $("#editCompanyPhone").val()
             var editCompanyAddr = $("#editCompanyAddr").val()
             var editCompanyNum = $("#editCompanyNum").val()
-            //alert(editCompanyId)
-            //alert(editCompanyName)
-            //alert(editCompanyPhone)
-            //alert(editCompanyAddr)
-            //alert(editCompanyNum)
+            alert(editCompanyId)
+            alert(editCompanyName)
+            alert(editCompanyPhone)
+            alert(editCompanyAddr)
+            alert(editCompanyNum)
 
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "factory_updata",
-                    factoryID: editCompanyId,
+                    factoryId: editCompanyId,
                     factoryName: editCompanyName,
                     factoryPhone: editCompanyPhone,
                     factoryAddress: editCompanyAddr,
-                    factoryTaxID: editCompanyNum
+                    factoryTaxId: editCompanyNum
                 },
                 function(data, status) {
                     //alert("Data: " + data + "\nStatus: " + status);
@@ -287,12 +287,12 @@
                         for (i = 0; i < obj.length; i++) {
                             var list_num = parseInt(i) + parseInt(1)
                             var temp = "<tr><td>" + list_num + "</td>" +
-                                "<td>" + obj[i].FactoryId + "</td>" +
-                                "<td>" + obj[i].FactoryName + "</td>" +
-                                "<td>" + obj[i].FactoryPhone + "</td>" +
-                                "<td>" + obj[i].FactoryTaxID + "</td>" +
-                                "<td>" + obj[i].FactoryAddress + "</td>" +
-                                "<td><i class='far fa-edit mr-2' title='Edit' onclick='editCompany(this)' data-company-id='" + obj[i].FactoryId + "'></i><i class='far fa-trash-alt' title='Delete' onclick='deleteCompany(this)' data-company-id='" + obj[i].FactoryId + "'></i></td></tr>"
+                                "<td>" + obj[i].factoryId + "</td>" +
+                                "<td>" + obj[i].factoryName + "</td>" +
+                                "<td>" + obj[i].factoryPhone + "</td>" +
+                                "<td>" + obj[i].factoryTaxId + "</td>" +
+                                "<td>" + obj[i].factoryAddress + "</td>" +
+                                "<td><i class='far fa-edit mr-2' title='Edit' onclick='editCompany(this)' data-company-id='" + obj[i].factoryId + "'></i><i class='far fa-trash-alt' title='Delete' onclick='deleteCompany(this)' data-company-id='" + obj[i].factoryId + "'></i></td></tr>"
                             $("#tbodyCompanyList").append(temp);
                         }
                     }
@@ -305,7 +305,7 @@
             //alert(company_id)
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "factory_list_Only",
-                    factoryID: company_id
+                    factoryId: company_id
                 },
                 function(data, status) {
                     //alert("Data: " + data + "\nStatus: " + status);
@@ -313,12 +313,12 @@
                     //alert(obj.data)
                     var obj = obj.data
                     var temp = ""
-                    console.log(obj[0].FactoryId + obj[0].FactoryName + obj[0].FactoryPhone + obj[0].FactoryAddress + obj[0].FactoryTaxID)
-                    $("#editCompanyName").val(obj[0].FactoryName)
-                    $("#editCompanyPhone").val(obj[0].FactoryPhone)
-                    $("#editCompanyAddr").val(obj[0].FactoryAddress)
-                    $("#editCompanyNum").val(obj[0].FactoryTaxID)
-                    $("#btnCompanyEdit").attr("data-company-id", obj[0].FactoryId)
+                    console.log(obj[0].factoryId + obj[0].factoryName + obj[0].factoryPhone + obj[0].factoryAddress + obj[0].factoryTaxId)
+                    $("#editCompanyName").val(obj[0].factoryName)
+                    $("#editCompanyPhone").val(obj[0].factoryPhone)
+                    $("#editCompanyAddr").val(obj[0].factoryAddress)
+                    $("#editCompanyNum").val(obj[0].factoryTaxId)
+                    $("#btnCompanyEdit").attr("data-company-id", obj[0].factoryId)
                     $('#editCompanyModal').modal('show')
                 });
         }
@@ -328,7 +328,7 @@
             //alert(company_id)
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "factory_delete",
-                    factoryID: company_id
+                    factoryId: company_id
                 },
                 function(data, status) {
                     //alert("Data: " + data + "\nStatus: " + status);
