@@ -100,51 +100,25 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="purchaseName">訂購廠商</label>
-                            <input type="email" class="form-control" id="addPurchaseName" aria-describedby="emailHelp" placeholder="Enter Name">
-
-                        </div>
-                        <div class="form-group">
                             <label for="purchaseFactory">訂購廠商</label>
                             <select class="form-control" id="addPurchaseFactory">
-                              <option>1</option>
-                              <option>2</option>
-                              <option>3</option>
-                              <option>4</option>
-                              <option>5</option>
                             </select>
                         </div>
-                        <div class="form-row">
+                        <span id="addPurchaseProductArea">
+                            <div class="form-row">
                             <div class="form-group col-md-8">
                                 <label for="purchaseProduct">品項名稱</label>
-                                <select class="form-control" id="addPurchaseProduct">
-                                  <option>1</option>
-                                  <option>2</option>
-                                  <option>3</option>
-                                  <option>4</option>
-                                  <option>5</option>
+                                <select class="form-control addPurchaseProduct">
                                 </select>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="purchaseProductNum">品項數量</label>
-                                <input type="text" class="form-control" id="addPurchaseProductNum" placeholder="Number">
+                                <input type="text" class="form-control addPurchaseProductNum" placeholder="Number">
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-8">
-                                <select class="form-control" id="addPurchaseProduct">
-                                  <option>1</option>
-                                  <option>2</option>
-                                  <option>3</option>
-                                  <option>4</option>
-                                  <option>5</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <input type="text" class="form-control" id="addPurchaseProductNum" placeholder="Number">
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-success"><i class="fas fa-plus"></i> 新增品項欄位</button>
+                        </span>
+                       
+                        <button type="button" class="btn btn-success" id="btnPurchaseAddColumn"><i class="fas fa-plus"></i> 新增品項欄位</button>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -154,31 +128,7 @@
             </div>
         </div>
     </div>
-    <!-- Edit Purchase Modal -->
-    <div class="modal fade" id="editPurchaseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Purchase</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="purchaseName">訂購廠商</label>
-                            <input type="email" class="form-control" id="editPurchaseName" aria-describedby="emailHelp" placeholder="Enter Name">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="btnPurchaseEdit" data-purchase-id="">Edit</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -230,10 +180,51 @@
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script>
         showPurchaseList();
+        function getProductList(){
+            //抓品項名稱
+            $.post("http://140.118.175.199/api/WMS_API.php", {
+                    type: "product_list",
+                    companyId: getCookie("loginCompanyId")
+                },
+                function(data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var obj = JSON.parse(data);
+                    //alert(obj.data)
+                    var obj = obj.data
+                    var temp = ""
+                    for (i = 0; i < obj.length; i++) {
+                        var temp = temp + "<option data-product-id='" + obj[i].productId + "'>"+obj[i].productName+"</option>" 
+                    }
+                });
+            return temp
+        }
         //新增品項
         $("#btnPurchaseAdd").click(function() {
             $('#addPurchaseModal').modal('hide')
             var addPurchaseName = $("#addPurchaseName").val()
+            //抓訂購廠商列表
+            $.post("http://140.118.175.199/api/WMS_API.php", {
+                    type: "factory_list",
+                    companyId: getCookie("loginCompanyId")
+                },
+                function(data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    $("#addPurchaseFactory").html('')
+                    var obj = JSON.parse(data);
+                    //alert(obj.data)
+                    var obj = obj.data
+                    var temp = ""
+                    if (obj.length == 0) {
+                        $("#addPurchaseFactory").append("<option>No Factory Yet</option>");
+                    } else {
+                        for (i = 0; i < obj.length; i++) {
+                            var temp = "<option data-factory-id='" + obj[i].factoryId + "'>"+obj[i].factoryName+"</option>" 
+                            $("#addPurchaseFactory").append(temp);
+                        }
+                    }
+                });
+            $(".addPurchaseProduct").append(getProductList());
+            
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "Purchase_add",
                     purchaseName: addPurchaseName,
@@ -241,26 +232,18 @@
                 },
                 function(data, status) {
                     //alert("Data: " + data + "\nStatus: " + status);
-                    $("#tbodyPurchaseList").html('')
+                    $("#addPurchaseFactory").html('')
+                    $("#addPurchaseFactory").append()
                     showPurchaseList();
                 });
         });
-        //修改品項
-        $("#btnPurchaseEdit").click(function() {
-            var editPurchaseId = $("#btnPurchaseEdit").attr("data-purchase-id")
-            var editPurchaseName = $("#editPurchaseName").val()
-
-            $.post("http://140.118.175.199/api/WMS_API.php", {
-                    type: "Purchase_updata",
-                    PurchaseID: editPurchaseId,
-                    PurchaseName: editPurchaseName
-                },
-                function(data, status) {
-                    //alert("Data: " + data + "\nStatus: " + status);
-                    $("#tbodyPurchaseList").html('')
-                    showPurchaseList();
-                    $('#editPurchaseModal').modal('hide')
-                });
+        
+        //新增品項欄位
+        $("#btnPurchaseAddColumn").click(function() {
+            var temp = "<div class='form-row'><div class='form-group col-md-8'><select class='form-control addPurchaseProduct'>"+getProductList()+"</select></div><div class='form-group col-md-4'><input type='text' class='form-control addPurchaseProductNum' placeholder='Number'></div></div>" 
+            
+            $("#addPurchaseProductArea").append(temp)
+            
         });
         //顯示品項列表
         function showPurchaseList() {
@@ -295,26 +278,6 @@
                         }
                     }
 
-                });
-        }
-
-        function editPurchase(e) {
-            var purchase_id = $(e).attr("data-purchase-id")
-            //alert(purchase_id)
-            $.post("http://140.118.175.199/api/WMS_API.php", {
-                    type: "Purchase_list_Only",
-                    PurchaseID: purchase_id
-                },
-                function(data, status) {
-                    //alert("Data: " + data + "\nStatus: " + status);
-                    var obj = JSON.parse(data);
-                    //alert(obj.data)
-                    var obj = obj.data
-                    var temp = ""
-
-                    $("#editPurchaseName").val(obj[0].Purchase_name)
-                    $("#btnPurchaseEdit").attr("data-purchase-id", obj[0].Purchase_id)
-                    $('#editPurchaseModal').modal('show')
                 });
         }
 
