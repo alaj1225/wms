@@ -20,7 +20,7 @@
             <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">WMS</a>
             <ul class="navbar-nav px-3">
                 <li class="nav-item text-nowrap">
-                    <a class="nav-link" href="#">Sign out</a>
+                    <a class="nav-link" href="#" onclick="signOut()">Sign out</a>
                 </li>
             </ul>
         </nav>
@@ -278,6 +278,38 @@
                 $("#tbodyProductList").html('')
 				showProductList();
             });
+        }
+            
+        //登出
+        function signOut() {
+            document.cookie = "loginStatus=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "loginToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location.href = "http://140.118.175.199/wms-project/login/";
+        }
+        //偵測未登入跳轉至登入頁
+        function checkIfLogin() {
+            var loginStatus = getCookie("loginStatus")
+            var loginToken = getCookie("loginToken")
+            //console.log(loginStatus,loginToken)
+            if(loginStatus == "" || loginToken == "" || loginStatus == null || loginToken == null){
+                window.location.href = "http://140.118.175.199/wms-project/login/";
+            }
+        }
+        //取得Cookie值
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
         }
     </script>
     </body>

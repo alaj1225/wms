@@ -50,6 +50,7 @@
                     if (obj.code == 200){
                         setCookie("loginStatus", obj.code, 1)
                         setCookie("loginToken", obj.token, 1)
+                        setCookie("loginCompanyId", obj.factoryId, 1)
                         window.location.href = "http://140.118.175.199/wms-project/dashboard.html";
                     }
                     
