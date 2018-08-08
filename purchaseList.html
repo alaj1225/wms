@@ -117,7 +117,7 @@
                             </div>
                         </div>
                         </span>
-                       
+
                         <button type="button" class="btn btn-success" id="btnPurchaseAddColumn"><i class="fas fa-plus"></i> 新增品項欄位</button>
                     </form>
                 </div>
@@ -128,8 +128,8 @@
             </div>
         </div>
     </div>
-	
-	<!-- Show Purchase Detail Modal -->
+
+    <!-- Show Purchase Detail Modal -->
     <div class="modal fade" id="showPurchaseDetailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -140,35 +140,53 @@
                         </button>
                 </div>
                 <div class="modal-body">
-                    <div>廠商名稱 : <span id="showPurchaseDetail_factoryName"></span></div>
-                    <div>廠商電話 : <span id="showPurchaseDetail_factoryPhone"></span></div>
-                    <div>廠商地址 : <span id="showPurchaseDetail_factoryAddress"></span></div>
-                    <div>廠商統編 : <span id="showPurchaseDetail_factoryTaxId"></span></div>
+                    <h3>廠商資訊</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>廠商名稱</th>
+                                    <th>廠商電話</th>
+                                    <th>廠商地址</th>
+                                    <th>廠商統編</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td><span id="showPurchaseDetail_factoryName"></span></td>
+                                <td><span id="showPurchaseDetail_factoryPhone"></span></td>
+                                <td><span id="showPurchaseDetail_factoryAddress"></span></td>
+                                <td><span id="showPurchaseDetail_factoryTaxId"></span></td>
+                            </tr>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    
                     <hr>
                     <div class="table-responsive" id="tableShowPurchaseDetailList">
-                    <table class="table table-striped table-sm">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>品項序號</th>
-                                <th>品項名稱</th>
-                                <th>品項數量</th>
-                                <th>是否完成</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbodyShowPurchaseDetailList">
-                        </tbody>
-                    </table>
+                        <table class="table table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>品項序號</th>
+                                    <th>品項名稱</th>
+                                    <th>品項數量</th>
+                                    <th>是否完成</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyShowPurchaseDetailList">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="btnPurchaseAdd">Add</button>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -220,26 +238,26 @@
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script>
         showPurchaseList();
-        
-        //取得商品列表
-		var getProductList = ""
-		$.post("http://140.118.175.199/api/WMS_API.php", {
-                    type: "product_list",
-                    companyId: getCookie("loginCompanyId")
-                },
-                function(data, status) {
-                    //alert("Data: " + data + "\nStatus: " + status);
-                    var obj = JSON.parse(data);
-                    //alert(obj.data)
-                    var obj = obj.data
-                    
-                    for (i = 0; i < obj.length; i++) {
-                        getProductList = getProductList + "<option value='" + obj[i].productId + "'>"+obj[i].productName+"</option>" 
-                    }
-					//alert(getProductList)
-                });
 
-		
+        //取得商品列表
+        var getProductList = ""
+        $.post("http://140.118.175.199/api/WMS_API.php", {
+                type: "product_list",
+                companyId: getCookie("loginCompanyId")
+            },
+            function(data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var obj = JSON.parse(data);
+                //alert(obj.data)
+                var obj = obj.data
+
+                for (i = 0; i < obj.length; i++) {
+                    getProductList = getProductList + "<option value='" + obj[i].productId + "'>" + obj[i].productName + "</option>"
+                }
+                //alert(getProductList)
+            });
+
+
         //新增品項(視窗跳出)
         $("#btnAddPurchaseModal").click(function() {
             //抓訂購廠商列表
@@ -258,53 +276,57 @@
                         $("#addPurchaseFactory").append("<option>No Factory Yet</option>");
                     } else {
                         for (i = 0; i < obj.length; i++) {
-                            var temp = "<option value='" + obj[i].factoryId + "'>"+obj[i].factoryName+"</option>" 
+                            var temp = "<option value='" + obj[i].factoryId + "'>" + obj[i].factoryName + "</option>"
                             $("#addPurchaseFactory").append(temp);
                         }
                     }
                 });
-            
-			//抓商品列表並丟入下拉
+
+            //抓商品列表並丟入下拉
             $(".addPurchaseProduct").append(getProductList);
         });
-        
+
         //新增品項(送出)
         $("#btnPurchaseAdd").click(function() {
             var factoryId = $("#addPurchaseFactory").val()
             //var productId = $(".addPurchaseProduct").val()
-			var productId_all = $(".addPurchaseProduct");
-			var productNum_all = $(".addPurchaseProductNum");
-			var postData = []
+            var productId_all = $(".addPurchaseProduct");
+            var productNum_all = $(".addPurchaseProductNum");
+            var postData = []
             alert(factoryId)
-			for(var i = 0; i < productId_all.length; i++){
-				postData.push({"productId":$(productId_all[i]).val(),"productCount":$(productNum_all[i]).val()})
-				alert($(productId_all[i]).val());
-				alert($(productNum_all[i]).val());
-			}
-			var postData_all = {
-						"factoryId" : factoryId,
-						"companyId" : getCookie("loginCompanyId"),
-						"item" : postData
-					}
-			console.log(postData_all)
-			alert(JSON.stringify(postData_all))
-			$.post("http://140.118.175.199/api/WMS_API.php", {
+            for (var i = 0; i < productId_all.length; i++) {
+                postData.push({
+                    "productId": $(productId_all[i]).val(),
+                    "productCount": $(productNum_all[i]).val()
+                })
+                alert($(productId_all[i]).val());
+                alert($(productNum_all[i]).val());
+            }
+            var postData_all = {
+                "factoryId": factoryId,
+                "companyId": getCookie("loginCompanyId"),
+                "item": postData
+            }
+            console.log(postData_all)
+            alert(JSON.stringify(postData_all))
+            $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "purchase_add",
                     data: JSON.stringify(postData_all)
                 },
                 function(data, status) {
                     alert("Data: " + data + "\nStatus: " + status);
-             
+
                 });
             //alert(productId)
+            $('#showPurchaseDetailModal').modal('hide')
         });
-        
+
         //新增品項欄位
         $("#btnPurchaseAddColumn").click(function() {
-            var temp = "<div class='form-row'><div class='form-group col-md-8'><select class='form-control addPurchaseProduct'>"+getProductList+"</select></div><div class='form-group col-md-4'><input type='text' class='form-control addPurchaseProductNum' placeholder='Number' value='1'></div></div>" 
-            
+            var temp = "<div class='form-row'><div class='form-group col-md-8'><select class='form-control addPurchaseProduct'>" + getProductList + "</select></div><div class='form-group col-md-4'><input type='text' class='form-control addPurchaseProductNum' placeholder='Number' value='1'></div></div>"
+
             $("#addPurchaseProductArea").append(temp)
-            
+
         });
         //顯示品項列表
         function showPurchaseList() {
@@ -323,15 +345,15 @@
                     } else {
                         for (i = 0; i < obj.length; i++) {
                             var list_num = parseInt(i) + parseInt(1)
-                            if (obj[i].purchaseInBound == 0){
+                            if (obj[i].purchaseInBound == 0) {
                                 var purchaseInBound_html = "<i class='fas fa-times-circle'></i>"
-                            }else{
+                            } else {
                                 var purchaseInBound_html = "<i class='fas fa-check-circle'></i>"
                             }
                             var temp = "<tr><td>" + list_num + "</td>" +
                                 "<td>" + obj[i].purchaseId + "</td>" +
                                 "<td>" + obj[i].purchaseFactory + "</td>" +
-                                "<td>" + obj[i].purchaseTime + "</td>" +                            
+                                "<td>" + obj[i].purchaseTime + "</td>" +
                                 "<td>" + purchaseInBound_html + "</td>" +
 
                                 "<td><i class='fas fa-align-justify mr-2' title='Detail' onclick='showPurchaseDetail(this)' data-purchase-id='" + obj[i].purchaseId + "'></i><i class='far fa-trash-alt' title='Delete' onclick='deletePurchase(this)' data-purchase-id='" + obj[i].purchaseId + "'></i></td></tr>"
@@ -341,7 +363,7 @@
 
                 });
         }
-        
+
         function showPurchaseDetail(e) {
             var purchase_id = $(e).attr("data-purchase-id")
             //alert(purchase_id)
@@ -357,45 +379,45 @@
                     console.log(obj.data)
                     var obj_data = obj.data
                     var obj_factory = obj.factory
-					console.log(obj_factory)
+                    console.log(obj_factory)
 
-                    
+
                     $("#showPurchaseDetail_factoryName").text(obj_factory.factoryName)
                     $("#showPurchaseDetail_factoryPhone").text(obj_factory.factoryPhone)
                     $("#showPurchaseDetail_factoryAddress").text(obj_factory.factoryAddress)
                     $("#showPurchaseDetail_factoryTaxId").text(obj_factory.factoryTaxId)
-                
+
                     if (obj_data.length == 0) {
                         $("#tableShowPurchaseDetailList").append("<p style='text-align:center'>There isn't any purchase yet.</p>");
                     } else {
                         for (i = 0; i < obj_data.length; i++) {
                             var list_num = parseInt(i) + parseInt(1)
-                            if (obj_data[i].purchaseItemInBound == 0){
+                            if (obj_data[i].purchaseItemInBound == 0) {
                                 var purchaseItemInBound_html = "<i class='fas fa-times-circle'></i>"
-                            }else{
+                            } else {
                                 var purchaseItemInBound_html = "<i class='fas fa-check-circle'></i>"
                             }
                             var temp = "<tr><td>" + list_num + "</td>" +
                                 "<td>" + obj_data[i].purchaseItemId + "</td>" +
                                 "<td>" + obj_data[i].productName + "</td>" +
-                                "<td>" + obj_data[i].purchaseItemCount + "</td>" +                            
-                                "<td>" + purchaseItemInBound_html + "</td>" 
-                            
+                                "<td>" + obj_data[i].purchaseItemCount + "</td>" +
+                                "<td>" + purchaseItemInBound_html + "</td>"
+
                             $("#tbodyShowPurchaseDetailList").append(temp);
                         }
                     }
-					$('#showPurchaseDetailModal').modal('show')
-//                    var temp = ""
-//                    console.log(obj[0].FactoryId + obj[0].FactoryName + obj[0].FactoryPhone + obj[0].FactoryAddress + obj[0].FactoryTaxID)
-//                    $("#editCompanyName").val(obj[0].FactoryName)
-//                    $("#editCompanyPhone").val(obj[0].FactoryPhone)
-//                    $("#editCompanyAddr").val(obj[0].FactoryAddress)
-//                    $("#editCompanyNum").val(obj[0].FactoryTaxID)
-//                    $("#btnCompanyEdit").attr("data-company-id", obj[0].FactoryId)
-//                    $('#editCompanyModal').modal('show')
+                    $('#showPurchaseDetailModal').modal('show')
+                    //                    var temp = ""
+                    //                    console.log(obj[0].FactoryId + obj[0].FactoryName + obj[0].FactoryPhone + obj[0].FactoryAddress + obj[0].FactoryTaxID)
+                    //                    $("#editCompanyName").val(obj[0].FactoryName)
+                    //                    $("#editCompanyPhone").val(obj[0].FactoryPhone)
+                    //                    $("#editCompanyAddr").val(obj[0].FactoryAddress)
+                    //                    $("#editCompanyNum").val(obj[0].FactoryTaxID)
+                    //                    $("#btnCompanyEdit").attr("data-company-id", obj[0].FactoryId)
+                    //                    $('#editCompanyModal').modal('show')
                 });
         }
-        
+
         function deletePurchase(e) {
             var purchase_id = $(e).attr("data-purchase-id")
             //alert(purchase_id)
@@ -409,7 +431,7 @@
                     showPurchaseList();
                 });
         }
-        
+
         //登出
         function signOut() {
             document.cookie = "loginStatus=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -421,7 +443,7 @@
             var loginStatus = getCookie("loginStatus")
             var loginToken = getCookie("loginToken")
             //console.log(loginStatus,loginToken)
-            if(loginStatus == "" || loginToken == "" || loginStatus == null || loginToken == null){
+            if (loginStatus == "" || loginToken == "" || loginStatus == null || loginToken == null) {
                 window.location.href = "http://140.118.175.199/wms-project/login/";
             }
         }
