@@ -30,7 +30,7 @@
                     <div class="sidebar-sticky">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="#"> <i class="fas fa-box feather feather-file text-center"></i>
+                                <a class="nav-link active" href="#"> <i class="fas fa-box feather feather-file text-center"></i>
     商品庫存  <span class="sr-only">(current)</span></a>
                             </li>
                             <li class="nav-item">
@@ -42,7 +42,7 @@
     出貨單</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" href="#"> <i class="fas fa-file-alt feather feather-file text-center"></i>
+                                <a class="nav-link" href="#"> <i class="fas fa-file-alt feather feather-file text-center"></i>
     品項列表</a>
                             </li>
                             <li class="nav-item">
@@ -100,7 +100,7 @@
                         <form>
                             <div class="form-group">
                                 <label for="inventoryName">品項名稱</label>
-                                <select class="form-control addInventoryProduct">
+                                <select class="form-control" id="addInventoryProduct">
                                 </select>
                             </div>
                             <div class="form-group">
@@ -217,28 +217,34 @@
                 var obj = obj.data
 
                 for (i = 0; i < obj.length; i++) {
-                    getProductList = getProductList + "<option value='" + obj[i].productId + "'>" + obj[i].productName + "</option>"
+                    //getProductList = getProductList + "<option value='" + obj[i].productId + "'>" + obj[i].productName + "</option>"
+					$("#addInventoryProduct").append("<option value='" + obj[i].productId + "'>" + obj[i].productName + "</option>")
                 }
                 //alert(getProductList)
-                $("#addInventoryProduct").append(getProductList)
+                
             });
 	   
         //新增庫存
         $("#btnInventoryAdd").click(function() {
 			$('#addInventoryModal').modal('hide')
+            var addInventoryProduct = $("#addInventoryProduct").val()
             var addInventoryName = $("#addInventoryName").val()
             var addInventoryPosition = $("#addInventoryPosition").val()
             var addInventoryCount = $("#addInventoryCount").val()
+            //alert(addInventoryProduct)
+            //alert(addInventoryPosition)
+            //alert(addInventoryCount)
+            //alert(getCookie("loginCompanyId"))
             
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "inventory_simple_add",
-                    productName: addInventoryName,
+                    productId: addInventoryProduct,
                     inventoryPosition: addInventoryPosition,
                     inventoryCount: addInventoryCount,
                     companyId: getCookie("loginCompanyId")
                 },
                 function(data, status) {
-                    alert("Data: " + data + "\nStatus: " + status);
+                    //alert("Data: " + data + "\nStatus: " + status);
 				$("#tbodyInventoryList").html('')
 				showInventoryList();
                 });
@@ -250,9 +256,9 @@
             var editInventoryCount = $("#editInventoryCount").val()
             var editInventoryPosition = $("#editInventoryPosition").val()
             
-            alert(editInventoryId)
-            alert(editInventoryCount)
-            alert(editInventoryPosition)
+            //alert(editInventoryId)
+            //alert(editInventoryCount)
+            //alert(editInventoryPosition)
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "inventory_updata",
 					inventoryId: editInventoryId,
@@ -260,7 +266,7 @@
                     inventoryPosition: editInventoryPosition
                 },
                 function(data, status) {
-                    alert("Data: " + data + "\nStatus: " + status);
+                    //alert("Data: " + data + "\nStatus: " + status);
 					$("#tbodyInventoryList").html('')
 					showInventoryList();
 					$('#editInventoryModal').modal('hide')
@@ -306,9 +312,9 @@
                 inventoryId: inventory_id
             },
             function(data, status) {
-                alert("Data: " + data + "\nStatus: " + status);
+                //alert("Data: " + data + "\nStatus: " + status);
                 var obj = JSON.parse(data);
-			   	alert(obj.data)
+			   	//alert(obj.data)
 				var obj = obj.data
                 var temp = ""
                 
@@ -325,7 +331,7 @@
             //alert(inventory_id)
 			$.post("http://140.118.175.199/api/WMS_API.php", {
                 type: "inventory_delete",
-				inventoryID: inventory_id
+				inventoryId: inventory_id
             },
             function(data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
