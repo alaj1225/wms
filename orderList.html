@@ -287,14 +287,14 @@
             var productId_all = $(".addOrderProduct");
             var productNum_all = $(".addOrderProductNum");
             var postData = []
-            alert(factoryId)
+            //alert(factoryId)
             for (var i = 0; i < productId_all.length; i++) {
                 postData.push({
                     "productId": $(productId_all[i]).val(),
                     "productCount": $(productNum_all[i]).val()
                 })
-                alert($(productId_all[i]).val());
-                alert($(productNum_all[i]).val());
+                //alert($(productId_all[i]).val());
+                //alert($(productNum_all[i]).val());
             }
             var postData_all = {
                 "factoryId": factoryId,
@@ -302,16 +302,18 @@
                 "item": postData
             }
             console.log(postData_all)
-            alert(JSON.stringify(postData_all))
+            //alert(JSON.stringify(postData_all))
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "order_add",
                     data: JSON.stringify(postData_all)
                 },
                 function(data, status) {
-                    alert("Data: " + data + "\nStatus: " + status);
+                    //alert("Data: " + data + "\nStatus: " + status);
 
                 });
             //alert(productId)
+			$("#tbodyOrderList").html('')
+			showOrderList();
 			$('#addOrderModal').modal('hide')
         });
 
@@ -360,6 +362,7 @@
 
         function showOrderDetail(e) {
             var order_id = $(e).attr("data-order-id")
+			$("#tbodyShowOrderDetailList").html('')
             //alert(order_id)
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "orderItem_list",

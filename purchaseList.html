@@ -318,6 +318,8 @@
 
                 });
             //alert(productId)
+			$("#tbodyPurchaseList").html('')
+			showPurchaseList();
 			$('#addPurchaseModal').modal('hide')
         });
 
@@ -366,6 +368,7 @@
 
         function showPurchaseDetail(e) {
             var purchase_id = $(e).attr("data-purchase-id")
+			 $("#tbodyShowPurchaseDetailList").html('');
             //alert(purchase_id)
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "purchaseItem_list",
