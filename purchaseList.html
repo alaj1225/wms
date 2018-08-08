@@ -237,6 +237,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script>
+		checkIfLogin();
         showPurchaseList();
 
         //取得商品列表
@@ -293,14 +294,14 @@
             var productId_all = $(".addPurchaseProduct");
             var productNum_all = $(".addPurchaseProductNum");
             var postData = []
-            alert(factoryId)
+            //alert(factoryId)
             for (var i = 0; i < productId_all.length; i++) {
                 postData.push({
                     "productId": $(productId_all[i]).val(),
                     "productCount": $(productNum_all[i]).val()
                 })
-                alert($(productId_all[i]).val());
-                alert($(productNum_all[i]).val());
+                //alert($(productId_all[i]).val());
+                //alert($(productNum_all[i]).val());
             }
             var postData_all = {
                 "factoryId": factoryId,
@@ -308,13 +309,13 @@
                 "item": postData
             }
             console.log(postData_all)
-            alert(JSON.stringify(postData_all))
+            //alert(JSON.stringify(postData_all))
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "purchase_add",
                     data: JSON.stringify(postData_all)
                 },
                 function(data, status) {
-                    alert("Data: " + data + "\nStatus: " + status);
+                    //alert("Data: " + data + "\nStatus: " + status);
 
                 });
             //alert(productId)
