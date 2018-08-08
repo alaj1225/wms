@@ -100,7 +100,8 @@
                         <form>
                             <div class="form-group">
                                 <label for="inventoryName">品項名稱</label>
-                                <input type="text" class="form-control" id="addInventoryName" aria-describedby="emailHelp" placeholder="Enter Name">
+                                <select class="form-control addInventoryProduct">
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="inventoryName">品項櫃位</label>
@@ -203,7 +204,25 @@
         <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
         <script>
         showInventoryList();
-			
+		//取得商品列表
+        var getProductList = ""
+        $.post("http://140.118.175.199/api/WMS_API.php", {
+                type: "product_list",
+                companyId: getCookie("loginCompanyId")
+            },
+            function(data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var obj = JSON.parse(data);
+                //alert(obj.data)
+                var obj = obj.data
+
+                for (i = 0; i < obj.length; i++) {
+                    getProductList = getProductList + "<option value='" + obj[i].productId + "'>" + obj[i].productName + "</option>"
+                }
+                //alert(getProductList)
+                $("#addInventoryProduct").append(getProductList)
+            });
+	   
         //新增庫存
         $("#btnInventoryAdd").click(function() {
 			$('#addInventoryModal').modal('hide')
