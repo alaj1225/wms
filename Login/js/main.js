@@ -77,8 +77,9 @@
             //alert("ok")
             //alert(user_email)
             //alert(user_password)
+            //alert(user_company)
             $.post("http://140.118.175.199/api/WMS_API.php", {
-                    type: "sign_in",
+                    type: "sign_up",
                     email: user_email,
                     password: user_password,
                     companyId: user_company
