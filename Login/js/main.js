@@ -59,7 +59,46 @@
 
     });
 
+    $("#btn-signUp").click(function(){
+        var check = true;
+        var user_email = $("#input-email").val()
+        var user_password = $("#input-password").val()
+        var user_company = $("#signUpCompanyList").val()
+        for (var i = 0; i < input.length; i++) {
+            if (validate(input[i]) == false) {
+                showValidate(input[i]);
+                check = false;
+            }
+        }
 
+        if (check == false) {
+            return check;
+        } else {
+            //alert("ok")
+            //alert(user_email)
+            //alert(user_password)
+            $.post("http://140.118.175.199/api/WMS_API.php", {
+                    type: "sign_in",
+                    email: user_email,
+                    password: user_password,
+                    companyId: user_company
+                },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+					var obj = JSON.parse(data);
+                    //alert(obj)
+                    //alert(obj.code)
+                    //alert(obj.token)
+                    if (obj.code == 200){
+                        
+                        window.location.href = "http://140.118.175.199/wms-project/login";
+                    }
+                    
+                });
+        }
+
+    });
+    
     $('.validate-form .input100').each(function () {
         $(this).focus(function () {
             hideValidate(this);
