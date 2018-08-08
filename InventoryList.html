@@ -212,14 +212,14 @@
             var addInventoryCount = $("#addInventoryCount").val()
             
             $.post("http://140.118.175.199/api/WMS_API.php", {
-                    type: "inventory_add",
-                    inventoryName: addInventoryName,
+                    type: "inventory_simple_add",
+                    productName: addInventoryName,
                     inventoryPosition: addInventoryPosition,
                     inventoryCount: addInventoryCount,
                     companyId: getCookie("loginCompanyId")
                 },
                 function(data, status) {
-                    //alert("Data: " + data + "\nStatus: " + status);
+                    alert("Data: " + data + "\nStatus: " + status);
 				$("#tbodyInventoryList").html('')
 				showInventoryList();
                 });
@@ -232,7 +232,8 @@
             var editInventoryPosition = $("#editInventoryPosition").val()
             
             alert(editInventoryId)
-            alert(editInventoryName)
+            alert(editInventoryCount)
+            alert(editInventoryPosition)
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "inventory_updata",
 					inventoryId: editInventoryId,
@@ -266,7 +267,7 @@
 					var list_num = parseInt(i)+parseInt(1)
                     var temp = "<tr><td>"+list_num+"</td>"+
                                "<td>"+obj[i].inventoryId+"</td>"+
-                               "<td>"+obj[i].inventoryName+"</td>"+
+                               "<td>"+obj[i].productName+"</td>"+
                                "<td>"+obj[i].inventoryPosition+"</td>"+
                                "<td>"+obj[i].productCount+"</td>"+
                                "<td>"+obj[i].inventoryTime+"</td>"+
@@ -286,13 +287,13 @@
                 inventoryId: inventory_id
             },
             function(data, status) {
-                //alert("Data: " + data + "\nStatus: " + status);
+                alert("Data: " + data + "\nStatus: " + status);
                 var obj = JSON.parse(data);
-			   	//alert(obj.data)
+			   	alert(obj.data)
 				var obj = obj.data
                 var temp = ""
                 
-				$("#editInventoryName").val(obj[0].inventoryName)
+				$("#editInventoryName").val(obj[0].productName)
 				$("#editInventoryPosition").val(obj[0].inventoryPosition)
 				$("#editInventoryCount").val(obj[0].inventoryCount)
                 
