@@ -221,6 +221,7 @@
         <script>
 		checkIfLogin();
         showInventoryList();
+        showInventoryTotalList()
 		//取得商品列表
         var getProductList = ""
         $.post("http://140.118.175.199/api/WMS_API.php", {
@@ -322,7 +323,7 @@
 		}
         
         //顯示庫存統計列表
-		function showInventoryList(){
+		function showInventoryTotalList(){
 			$.post("http://140.118.175.199/api/WMS_API.php", {
                 type: "inventory_total_list",
                 companyId: 1
