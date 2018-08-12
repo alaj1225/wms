@@ -274,7 +274,10 @@
             });
         }
 		function deletePosition(e) {
-			var position_id = $(e).attr("data-position-id")
+			if (confirm("Confirm to Delete.") != true) {
+        
+			} else {
+				var position_id = $(e).attr("data-position-id")
             //alert(position_id)
 			$.post("http://140.118.175.199/api/WMS_API.php", {
                 type: "position_delete",
@@ -285,6 +288,8 @@
                 $("#tbodyPositionList").html('')
 				showPositionList();
             });
+			}
+			
         }
             
         //登出

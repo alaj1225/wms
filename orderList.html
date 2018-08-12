@@ -46,6 +46,10 @@
     品項列表</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="positionList.html"> <i class="fas fa-file-alt feather feather-file text-center"></i>
+    櫃位列表</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="companyList.html"> <i class="fas fa-id-card feather feather-file text-center"></i>
     廠商資料表</a>
                             </li>
@@ -419,7 +423,10 @@
         }
 
         function deleteOrder(e) {
-            var order_id = $(e).attr("data-order-id")
+			if (confirm("Confirm to Delete.") != true) {
+        
+			} else {
+				var order_id = $(e).attr("data-order-id")
             //alert(order_id)
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "order_delete",
@@ -430,6 +437,8 @@
                     $("#tbodyOrderList").html('')
                     showOrderList();
                 });
+			}
+            
         }
 
         //登出

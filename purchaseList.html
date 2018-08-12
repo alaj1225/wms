@@ -48,6 +48,10 @@
     品項列表</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="positionList.html"> <i class="fas fa-file-alt feather feather-file text-center"></i>
+    櫃位列表</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="companyList.html"> <i class="fas fa-id-card feather feather-file text-center"></i>
     廠商資料表</a>
                             </li>
@@ -259,7 +263,23 @@
                 }
                 //alert(getProductList)
             });
+		//取得櫃位列表
+        var getPositionList = ""
+        $.post("http://140.118.175.199/api/WMS_API.php", {
+                type: "position_list",
+                companyId: getCookie("loginCompanyId")
+            },
+            function(data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var obj = JSON.parse(data);
+                //alert(obj.data)
+                var obj = obj.data
 
+                for (i = 0; i < obj.length; i++) {
+                    getPositionList = getPositionList + "<option value='" + obj[i].positionId + "'>" + obj[i].positionName + "</option>"
+                }
+                //alert(getProductList)
+            });
 
         //新增品項(視窗跳出)
         $("#btnAddPurchaseModal").click(function() {
@@ -371,7 +391,7 @@
 
         function showPurchaseDetail(e) {
             var purchase_id = $(e).attr("data-purchase-id")
-			 $("#tbodyShowPurchaseDetailList").html('');
+			$("#tbodyShowPurchaseDetailList").html('');
             //alert(purchase_id)
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "purchaseItem_list",
@@ -400,8 +420,10 @@
                             var list_num = parseInt(i) + parseInt(1)
                             if (obj_data[i].purchaseItemInBound == 0) {
                                 var purchaseItemInBound_html = "<i class='fas fa-times-circle'></i>"
+								var purchaseItemInBound_change_html = "<td><select class='mr-2' id='purchaseItemInBound_position'>"+getPositionList+"</select><button type='button' class='btn btn-success btn-sm' data-purchase-id='" + obj_data[i].purchaseItemId + "' onclick='purchaseItemInBound_change(this)' style='position:  relative;top: -3px;height: 25px;padding-top: 0px;'>入庫</button></td></tr>"
                             } else {
                                 var purchaseItemInBound_html = "<i class='fas fa-check-circle'></i>"
+								var purchaseItemInBound_change_html = "<td>入庫完畢</td></tr>"
                             }
                             var temp = "<tr><td>" + list_num + "</td>" +
                                 "<td>" + obj_data[i].purchaseItemId + "</td>" +
@@ -409,12 +431,8 @@
                                 "<td>" + obj_data[i].purchaseItemCount + "</td>" +
                                 "<td>" + obj_data[i].productUnit + "</td>" +
                                 "<td>" + purchaseItemInBound_html + "</td>" +
-                                "<td><select><option value="volvo">Volvo</option></select><button type='button' class='btn btn-success' data-purchase-id='" + obj[i].purchaseItemId + "' onclick=''>入庫</button></td></tr>"
+                                purchaseItemInBound_change_html
                             
-                        <i class="fas fa-plus"></i>
-                        Add
-                    </button>
-
                             $("#tbodyShowPurchaseDetailList").append(temp);
                         }
                     }
@@ -431,7 +449,10 @@
         }
 
         function deletePurchase(e) {
-            var purchase_id = $(e).attr("data-purchase-id")
+			if (confirm("Confirm to Delete.") != true) {
+        
+			} else {
+				var purchase_id = $(e).attr("data-purchase-id")
             //alert(purchase_id)
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "purchase_delete",
@@ -442,8 +463,25 @@
                     $("#tbodyPurchaseList").html('')
                     showPurchaseList();
                 });
+			}
+            
         }
-
+		
+		function purchaseItemInBound_change(e) {
+			var purchaseItemId = $(e).attr("data-purchase-id")
+			var	purchaseItemInBound_position = $("#purchaseItemInBound_position").val()
+			$.post("http://140.118.175.199/api/WMS_API.php", {
+                    type: "inventory_add",
+                    purchaseItemId: purchaseItemId,
+					inventoryPosition: purchaseItemInBound_position
+                },
+                function(data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    //$("#tbodyShowPurchaseDetailList").html('')
+                    //showPurchaseDetail(e);
+					$(e).parent().html('入庫完畢')
+                });
+		}
         //登出
         function signOut() {
             document.cookie = "loginStatus=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";

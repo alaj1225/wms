@@ -48,6 +48,10 @@
     品項列表</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="positionList.html"> <i class="fas fa-file-alt feather feather-file text-center"></i>
+    櫃位列表</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link active" href="companyList.html"> <i class="fas fa-id-card feather feather-file text-center"></i>
     廠商資料表</a>
                             </li>
@@ -324,7 +328,10 @@
         }
 
         function deleteCompany(e) {
-            var company_id = $(e).attr("data-company-id")
+			if (confirm("Confirm to Delete.") != true) {
+        
+			} else {
+				var company_id = $(e).attr("data-company-id")
             //alert(company_id)
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "factory_delete",
@@ -335,6 +342,8 @@
                     $("#tbodyCompanyList").html('')
                     showCompanyList();
                 });
+			}
+            
         }
         //登出
         function signOut() {
