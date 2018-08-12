@@ -73,6 +73,7 @@
                                     <th>#</th>
                                     <th>品項序號</th>
                                     <th>品項名稱</th>
+                                    <th>品項單位</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
@@ -97,7 +98,11 @@
                         <form>
                             <div class="form-group">
                                 <label for="productName">品項名稱</label>
-                                <input type="email" class="form-control" id="addProductName" aria-describedby="emailHelp" placeholder="Enter Name">
+                                <input type="text" class="form-control" id="addProductName" aria-describedby="emailHelp" placeholder="Enter Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="productName">品項單位</label>
+                                <input type="text" class="form-control" id="addProductUnit" aria-describedby="emailHelp" placeholder="Enter Name">
                             </div>
                         </form>
                     </div>
@@ -122,7 +127,11 @@
                         <form>
                             <div class="form-group">
                                 <label for="productName">品項名稱</label>
-                                <input type="email" class="form-control" id="editProductName" aria-describedby="emailHelp" placeholder="Enter Name">
+                                <input type="text" class="form-control" id="editProductName" aria-describedby="emailHelp" placeholder="Enter Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="productName">品項單位</label>
+                                <input type="text" class="form-control" id="editProductUnit" aria-describedby="emailHelp" placeholder="Enter Name">
                             </div>
                             
                         </form>
@@ -191,9 +200,11 @@
         $("#btnProductAdd").click(function() {
 			$('#addProductModal').modal('hide')
             var addProductName = $("#addProductName").val()
+            var addProductUnit = $("#addProductUnit").val()
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "product_add",
                     productName: addProductName,
+                    productUnit: addProductUnit,
                     companyId: 1
                 },
                 function(data, status) {
@@ -207,12 +218,14 @@
         $("#btnProductEdit").click(function() {
 			var editProductId = $("#btnProductEdit").attr("data-product-id")
             var editProductName = $("#editProductName").val()
+            var editProductUnit = $("#editProductUnit").val()
             //alert(editProductId)
             //alert(editProductName)
             $.post("http://140.118.175.199/api/WMS_API.php", {
                     type: "product_updata",
 					productId: editProductId,
-                    productName: editProductName
+                    productName: editProductName,
+                    productUnit: editProductUnit
                 },
                 function(data, status) {
                     //alert("Data: " + data + "\nStatus: " + status);
@@ -242,6 +255,7 @@
                     var temp = "<tr><td>"+list_num+"</td>"+
                                "<td>"+obj[i].productId+"</td>"+
                                "<td>"+obj[i].productName+"</td>"+
+                               "<td>"+obj[i].productUnit+"</td>"+
                                
                                
                                 "<td><i class='far fa-edit mr-2' title='Edit' onclick='editProduct(this)' data-product-id='"+obj[i].productId+"'></i><i class='far fa-trash-alt' title='Delete' onclick='deleteProduct(this)' data-product-id='"+obj[i].productId+"'></i></td></tr>"

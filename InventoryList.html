@@ -75,6 +75,7 @@
                                     <th>品項名稱</th>
                                     <th>品項櫃位</th>
                                     <th>品項數量</th>
+                                    <th>品項單位</th>
                                     <th>進貨時間</th>
                                     <th>操作</th>
                                 </tr>
@@ -313,6 +314,7 @@
                                "<td>"+obj[i].productName+"</td>"+
                                "<td>"+obj[i].inventoryPosition+"</td>"+
                                "<td>"+obj[i].productCount+"</td>"+
+                               "<td>"+obj[i].productUnit+"</td>"+
                                "<td>"+obj[i].inventoryTime+"</td>"+
                                 "<td><i class='far fa-edit mr-2' title='Edit' onclick='editInventory(this)' data-inventory-id='"+obj[i].inventoryId+"'></i><i class='far fa-trash-alt' title='Delete' onclick='deleteInventory(this)' data-inventory-id='"+obj[i].inventoryId+"'></i></td></tr>"
                     $("#tbodyInventoryList").append(temp);        
@@ -329,9 +331,9 @@
                 companyId: 1
             },
             function(data, status) {
-                //alert("Data: " + data + "\nStatus: " + status);
+                alert("Data: " + data + "\nStatus: " + status);
                 var obj = JSON.parse(data);
-			   	//alert(obj.data)
+			   	alert(obj.data)
 				var obj = obj.data
                 var temp = ""
                 if(obj.length == 0){

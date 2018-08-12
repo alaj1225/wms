@@ -85,7 +85,7 @@
                 </main>
             </div>
         </div>
-        <!-- Add Purchase Modal -->
+        <!-- Add Order Modal -->
         <div class="modal fade" id="addOrderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -125,7 +125,7 @@
                 </div>
             </div>
         </div>
-        <!-- Show Purchase Detail Modal -->
+        <!-- Show Order Detail Modal -->
         <div class="modal fade" id="showOrderDetailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -167,6 +167,7 @@
                                         <th>品項序號</th>
                                         <th>品項名稱</th>
                                         <th>品項數量</th>
+                                        <th>品項單位</th>
                                         <th>是否完成</th>
                                     </tr>
                                 </thead>
@@ -399,6 +400,7 @@
                                 "<td>" + obj_data[i].orderItemId + "</td>" +
                                 "<td>" + obj_data[i].productName + "</td>" +
                                 "<td>" + obj_data[i].orderItemCount + "</td>" +
+                                "<td>" + obj_data[i].productUnit + "</td>" +
                                 "<td>" + orderItemOutBound_html + "</td>"
 
                             $("#tbodyShowOrderDetailList").append(temp);
