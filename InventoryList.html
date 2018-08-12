@@ -331,9 +331,9 @@
                 companyId: 1
             },
             function(data, status) {
-                alert("Data: " + data + "\nStatus: " + status);
+                //alert("Data: " + data + "\nStatus: " + status);
                 var obj = JSON.parse(data);
-			   	alert(obj.data)
+			   	//alert(obj.data)
 				var obj = obj.data
                 var temp = ""
                 if(obj.length == 0){
@@ -342,13 +342,12 @@
                     for (i = 0; i < obj.length; i++) {
 					var list_num = parseInt(i)+parseInt(1)
                     var temp = "<tr><td>"+list_num+"</td>"+
-                              
                                "<td>"+obj[i].productName+"</td>"+
-                               
                                "<td>"+obj[i].productCount+"</td>"+
-                               "<td>"+obj[i].productUnit+"</td>"+
+                               "<td>"+obj[i].productUnit+"</td>"
                                 
-                    $("#tbodyInventoryTotalList").append(temp);        
+                    $("#tbodyInventoryTotalList").append(temp); 
+					
                 }
                 }
                 
