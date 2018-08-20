@@ -139,7 +139,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="print_parts">
                         <h4>廠商資訊</h4>
                         <div class="table-responsive">
                             <table class="table table-striped table-sm">
@@ -181,6 +181,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="printScreen(print_parts);"><i class="fas fa-print"></i>
+
+Print</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -190,6 +193,7 @@
     ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/JsBarcode.all.min.js"></script>
         <script src="assets/js/popper.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -401,13 +405,15 @@
                                 var orderItemOutBound_html = "<i class='fas fa-check-circle'></i>"
                             }
                             var temp = "<tr><td>" + list_num + "</td>" +
-                                "<td>" + obj_data[i].orderItemId + "</td>" +
+                                "<td>" + "<svg id="+obj_data[i].orderItemId+"></svg>" + "</td>" +
                                 "<td>" + obj_data[i].productName + "</td>" +
                                 "<td>" + obj_data[i].orderItemCount + "</td>" +
                                 "<td>" + obj_data[i].productUnit + "</td>" +
                                 "<td>" + orderItemOutBound_html + "</td>"
 
                             $("#tbodyShowOrderDetailList").append(temp);
+							var id = obj_data[i].orderItemId;
+							$('#' + id).JsBarcode(obj_data[i].orderItemId, {height: 20,width: 1});
                         }
                     }
                     $('#showOrderDetailModal').modal('show')
@@ -472,7 +478,17 @@
             }
             return "";
         }
-
+		function printScreen(printlist) 
+		  {
+			 var value = printlist.innerHTML;
+			 var printPage = window.open("", "Printing...", "");
+			 printPage.document.open();
+			 printPage.document.write("<HTML><head></head><BODY onload='window.print();window.close()'>");
+			 printPage.document.write("<PRE>");
+			 printPage.document.write(value);
+			 printPage.document.write("</PRE>");
+			 printPage.document.close("</BODY></HTML>");
+		  }
     </script>
     </body>
 </html>

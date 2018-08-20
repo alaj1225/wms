@@ -143,7 +143,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="print_parts">
                     <h4>廠商資訊</h4>
                     <div class="table-responsive">
                         <table class="table table-striped table-sm">
@@ -187,6 +187,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="printScreen(print_parts);"><i class="fas fa-print"></i>
+
+Print</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -197,6 +200,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/JsBarcode.all.min.js"></script>
     <script src="assets/js/popper.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -420,13 +424,13 @@
                             var list_num = parseInt(i) + parseInt(1)
                             if (obj_data[i].purchaseItemInBound == 0) {
                                 var purchaseItemInBound_html = "<i class='fas fa-times-circle'></i>"
-								var purchaseItemInBound_change_html = "<td><select class='mr-2' id='purchaseItemInBound_position'>"+getPositionList+"</select><button type='button' class='btn btn-success btn-sm' data-purchase-id='" + obj_data[i].purchaseItemId + "' onclick='purchaseItemInBound_change(this)' style='position:  relative;top: -3px;height: 25px;padding-top: 0px;'>入庫</button></td></tr>"
+								var purchaseItemInBound_change_html = "<td><select class='mr-2' id='purchaseItemInBound_position'>"+getPositionList+"</select><button type='button' class='btn btn-success btn-sm' data-purchase-id='" + obj_data[i].purchaseItemId + "' data-purchase-list-id='" + purchase_id + "'onclick='purchaseItemInBound_change(this)' style='position:  relative;top: -3px;height: 25px;padding-top: 0px;'>入庫</button></td></tr>"
                             } else {
                                 var purchaseItemInBound_html = "<i class='fas fa-check-circle'></i>"
 								var purchaseItemInBound_change_html = "<td>入庫完畢</td></tr>"
                             }
                             var temp = "<tr><td>" + list_num + "</td>" +
-                                "<td>" + obj_data[i].purchaseItemId + "</td>" +
+                                "<td>" + "<svg id="+obj_data[i].purchaseItemId+"></svg>"+ "</td>" +
                                 "<td>" + obj_data[i].productName + "</td>" +
                                 "<td>" + obj_data[i].purchaseItemCount + "</td>" +
                                 "<td>" + obj_data[i].productUnit + "</td>" +
@@ -434,6 +438,9 @@
                                 purchaseItemInBound_change_html
                             
                             $("#tbodyShowPurchaseDetailList").append(temp);
+							var id = obj_data[i].purchaseItemId;
+							$('#' + id).JsBarcode(obj_data[i].purchaseItemId, {height: 20,width: 1});
+							//JsBarcode('#' + id, obj_data[i].purchaseItemId, {height: 50,width: 6});
                         }
                     }
                     $('#showPurchaseDetailModal').modal('show')
@@ -479,7 +486,68 @@
                     //alert("Data: " + data + "\nStatus: " + status);
                     //$("#tbodyShowPurchaseDetailList").html('')
                     //showPurchaseDetail(e);
+				
 					$(e).parent().html('入庫完畢')
+				$("#tbodyPurchaseList").html('');
+					showPurchaseList()
+				$("#tbodyShowPurchaseDetailList").html('');
+            
+            $.post("http://140.118.175.199/api/WMS_API.php", {
+                    type: "purchaseItem_list",
+                    purchaseId: $(e).attr("data-purchase-list-id")
+                },
+                function(data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    console.log("Data: " + data + "\nStatus: " + status);
+                    var obj = JSON.parse(data);
+                    //alert(obj.data)
+                    console.log(obj.data)
+                    var obj_data = obj.data
+                    var obj_factory = obj.factory
+                    console.log(obj_factory)
+
+
+                    $("#showPurchaseDetail_factoryName").text(obj_factory.factoryName)
+                    $("#showPurchaseDetail_factoryPhone").text(obj_factory.factoryPhone)
+                    $("#showPurchaseDetail_factoryAddress").text(obj_factory.factoryAddress)
+                    $("#showPurchaseDetail_factoryTaxId").text(obj_factory.factoryTaxId)
+
+                    if (obj_data.length == 0) {
+                        $("#tableShowPurchaseDetailList").append("<p style='text-align:center'>There isn't any purchase yet.</p>");
+                    } else {
+                        for (i = 0; i < obj_data.length; i++) {
+                            var list_num = parseInt(i) + parseInt(1)
+                            if (obj_data[i].purchaseItemInBound == 0) {
+                                var purchaseItemInBound_html = "<i class='fas fa-times-circle'></i>"
+								var purchaseItemInBound_change_html = "<td><select class='mr-2' id='purchaseItemInBound_position'>"+getPositionList+"</select><button type='button' class='btn btn-success btn-sm' data-purchase-id='" + obj_data[i].purchaseItemId + "' data-purchase-list-id='" + $(e).attr("data-purchase-list-id") + "'onclick='purchaseItemInBound_change(this)' style='position:  relative;top: -3px;height: 25px;padding-top: 0px;'>入庫</button></td></tr>"
+                            } else {
+                                var purchaseItemInBound_html = "<i class='fas fa-check-circle'></i>"
+								var purchaseItemInBound_change_html = "<td>入庫完畢</td></tr>"
+                            }
+                            var temp = "<tr><td>" + list_num + "</td>" +
+                                "<td>" + "<svg id="+obj_data[i].purchaseItemId+"></svg>"+ "</td>" +
+                                "<td>" + obj_data[i].productName + "</td>" +
+                                "<td>" + obj_data[i].purchaseItemCount + "</td>" +
+                                "<td>" + obj_data[i].productUnit + "</td>" +
+                                "<td>" + purchaseItemInBound_html + "</td>" +
+                                purchaseItemInBound_change_html
+                            
+                            $("#tbodyShowPurchaseDetailList").append(temp);
+							var id = obj_data[i].purchaseItemId;
+							$('#' + id).JsBarcode(obj_data[i].purchaseItemId, {height: 20,width: 1});
+							//JsBarcode('#' + id, obj_data[i].purchaseItemId, {height: 50,width: 6});
+                        }
+                    }
+                    //$('#showPurchaseDetailModal').modal('show')
+                    //                    var temp = ""
+                    //                    console.log(obj[0].FactoryId + obj[0].FactoryName + obj[0].FactoryPhone + obj[0].FactoryAddress + obj[0].FactoryTaxID)
+                    //                    $("#editCompanyName").val(obj[0].FactoryName)
+                    //                    $("#editCompanyPhone").val(obj[0].FactoryPhone)
+                    //                    $("#editCompanyAddr").val(obj[0].FactoryAddress)
+                    //                    $("#editCompanyNum").val(obj[0].FactoryTaxID)
+                    //                    $("#btnCompanyEdit").attr("data-company-id", obj[0].FactoryId)
+                    //                    $('#editCompanyModal').modal('show')
+                });
                 });
 		}
         //登出
@@ -513,7 +581,18 @@
             }
             return "";
         }
-
+		
+		function printScreen(printlist) 
+		  {
+			 var value = printlist.innerHTML;
+			 var printPage = window.open("", "Printing...", "");
+			 printPage.document.open();
+			 printPage.document.write("<HTML><head></head><BODY onload='window.print();window.close()'>");
+			 printPage.document.write("<PRE>");
+			 printPage.document.write(value);
+			 printPage.document.write("</PRE>");
+			 printPage.document.close("</BODY></HTML>");
+		  }
     </script>
 </body>
 
