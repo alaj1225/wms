@@ -232,7 +232,7 @@
                     productUnit: editProductUnit
                 },
                 function(data, status) {
-                    alert("Data: " + data + "\nStatus: " + status);
+                    //alert("Data: " + data + "\nStatus: " + status);
 					$("#tbodyProductList").html('')
 					showProductList();
 					$('#editProductModal').modal('hide')
@@ -278,9 +278,9 @@
                 productId: product_id
             },
             function(data, status) {
-                alert("Data: " + data + "\nStatus: " + status);
+                //alert("Data: " + data + "\nStatus: " + status);
                 var obj = JSON.parse(data);
-			   	alert(obj.data)
+			   	//alert(obj.data)
 				var obj = obj.data
                 var temp = ""
                 

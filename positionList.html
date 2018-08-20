@@ -66,6 +66,9 @@
                         </div>
                     </div>
                     <h2 class="mb-4">Position List</h2>
+					<button type="button" class="btn btn-primary float-right ml-2" data-dismiss="modal" onclick="printScreen(tablePositionList);"><i class="fas fa-print"></i>
+
+Print</button>
                     <button type="button" class="btn btn-success mb-3 float-right" data-toggle="modal" data-target="#addPositionModal">
                         <i class="fas fa-plus"></i>
                         Add
@@ -141,6 +144,7 @@
     ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/JsBarcode.all.min.js"></script>
         <script src="assets/js/popper.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -219,7 +223,7 @@
                     positionName: editPositionName
                 },
                 function(data, status) {
-                    alert("Data: " + data + "\nStatus: " + status);
+                   // alert("Data: " + data + "\nStatus: " + status);
 					$("#tbodyPositionList").html('')
 					showPositionList();
 					$('#editPositionModal').modal('hide')
@@ -244,10 +248,12 @@
                     for (i = 0; i < obj.length; i++) {
 					var list_num = parseInt(i)+parseInt(1)
                     var temp = "<tr><td>"+list_num+"</td>"+
-                               "<td>"+obj[i].positionId+"</td>"+
+                               "<td>"+"<svg id="+obj[i].positionId+"></svg>"+"</td>"+
                                "<td>"+obj[i].positionName+"</td>"+
                                 "<td><i class='far fa-edit mr-2' title='Edit' onclick='editPosition(this)' data-position-id='"+obj[i].positionId+"'></i><i class='far fa-trash-alt' title='Delete' onclick='deletePosition(this)' data-position-id='"+obj[i].positionId+"'></i></td></tr>"
-                    $("#tbodyPositionList").append(temp);        
+                    $("#tbodyPositionList").append(temp);     
+					var id = obj[i].positionId;
+					$('#' + id).JsBarcode(obj[i].positionId, {height: 30,width: 1,fontSize:12,background:"#00000000",margin:1});
                 }
                 }
                 
@@ -323,6 +329,17 @@
             }
             return "";
         }
+		function printScreen(printlist) 
+		  {
+			 var value = printlist.innerHTML;
+			 var printPage = window.open("", "Printing...", "");
+			 printPage.document.open();
+			 printPage.document.write("<HTML><head></head><BODY onload='window.print();window.close()'>");
+			 printPage.document.write("<PRE>");
+			 printPage.document.write(value);
+			 printPage.document.write("</PRE>");
+			 printPage.document.close("</BODY></HTML>");
+		  }	
     </script>
     </body>
 </html>

@@ -66,6 +66,9 @@
                         </div>
                     </div>
                     <h2 class="mb-4">Inventory List</h2>
+					<button type="button" class="btn btn-primary float-right ml-2" data-dismiss="modal" onclick="printScreen(tableInventoryList);"><i class="fas fa-print"></i>
+
+Print</button>
                     <button type="button" class="btn btn-success mb-3 float-right" data-toggle="modal" data-target="#addInventoryModal">
                         <i class="fas fa-plus"></i>
                         Add
@@ -181,6 +184,7 @@
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/js/popper.js"></script>
+		<script src="assets/js/JsBarcode.all.min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
@@ -338,14 +342,16 @@
                     for (i = 0; i < obj.length; i++) {
 					var list_num = parseInt(i)+parseInt(1)
                     var temp = "<tr><td>"+list_num+"</td>"+
-                               "<td>"+obj[i].inventoryId+"</td>"+
+                               "<td>"+"<svg id="+obj[i].inventoryId+"></svg>"+"</td>"+
                                "<td>"+obj[i].productName+"</td>"+
                                "<td>"+obj[i].inventoryPosition+"</td>"+
                                "<td>"+obj[i].productCount+"</td>"+
                                "<td>"+obj[i].productUnit+"</td>"+
                                "<td>"+obj[i].inventoryTime+"</td>"+
                                 "<td><i class='far fa-edit mr-2' title='Edit' onclick='editInventory(this)' data-inventory-id='"+obj[i].inventoryId+"'></i><i class='far fa-trash-alt' title='Delete' onclick='deleteInventory(this)' data-inventory-id='"+obj[i].inventoryId+"'></i></td></tr>"
-                    $("#tbodyInventoryList").append(temp);        
+                    $("#tbodyInventoryList").append(temp);       
+					var id = obj[i].inventoryId;
+					$('#' + id).JsBarcode(obj[i].inventoryId, {height: 30,width: 1,fontSize:12,background:"#00000000",margin:1});
                 }
                 }
                 
@@ -457,6 +463,17 @@
             }
             return "";
         }
+		function printScreen(printlist) 
+		  {
+			 var value = printlist.innerHTML;
+			 var printPage = window.open("", "Printing...", "");
+			 printPage.document.open();
+			 printPage.document.write("<HTML><head></head><BODY onload='window.print();window.close()'>");
+			 printPage.document.write("<PRE>");
+			 printPage.document.write(value);
+			 printPage.document.write("</PRE>");
+			 printPage.document.close("</BODY></HTML>");
+		  }		
     </script>
     </body>
 </html>
